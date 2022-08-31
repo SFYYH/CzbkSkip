@@ -1,0 +1,35 @@
+// ==UserScript==
+// @name         跳视频
+// @namespace    *.com
+// @version      9.9.9
+// @description  colin魔改
+// @author       colin
+// @match        https://stu.ityxb.com/preview/detail/*
+// @grant        GM_log
+// @icon         https://tch.ityxb.com/favicon.ico
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    function skip() {
+        const video = document.getElementsByTagName('video')[0]
+        if (video != null) {            
+            video.play()
+            video.currentTime = video.duration - 6
+        } else {
+            GM_log("找不到视频")
+        }
+    }
+
+    function addBtn() {
+        var button = document.createElement("input");
+        button.setAttribute("type", "button");
+        button.setAttribute("value", '跳过')
+        button.addEventListener('click', skip)
+        //document.body.appendChild(button)
+        document.getElementsByClassName("course-name")[0].appendChild(button)
+    }
+    addBtn()
+
+})();
