@@ -19,7 +19,7 @@ var index = 0;//搜题索引自动增加
 
 window.onload = function(){
     var bgdiv = document.getElementById("writeQuestion");
-bgdiv.style.background = "url('https://i0.hdslb.com/bfs/new_dyn/52c5f470e7eb998ab44e2753045f34831494265429.jpg@1036w.webp')";
+bgdiv.style.background = "url('https://i.postimg.cc/BZKZRRtJ/20220508084230592.jpg')";
 
 tibody=document.getElementsByClassName("questionItem question-item-box");
 total = tibody.length;
