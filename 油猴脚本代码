@@ -8,6 +8,7 @@
 // @namespace    https://stu.ityxb.com/writePaper/busywork/*
 // @match        https://stu.ityxb.com/writePaper/busywork/*
 // @grant        GM_xmlhttpRequest
+// @grant        GM_addStyle
 // @grant        GM_log
 // @icon         https://tch.ityxb.com/favicon.ico
 // ==/UserScript==
@@ -16,10 +17,139 @@
 var tibody;//题目数组
 var total = 0;//题目总数量
 var index = 0;//搜题索引自动增加
+ let url = window.location.href;
+console.log('欢迎使用colincora传智播客小助手！作者QQ3300519161');
+        if(url.includes("https://stu.ityxb.com/preview/detail/")){
+            console.log('这是预习作业答题部分！');
+            window.onload = function(){
+//    var bgdiv = document.getElementsByClassName("question-info-box");
+//bgdiv.style.background = "url('https://i.postimg.cc/BZKZRRtJ/20220508084230592.jpg')";
 
+//tibody=document.getElementsByClassName("question-title-box");
+//total = tibody.length;
+
+
+                  // 创建一个新的 div 元素
+                 let newDiv = document.createElement("div");
+                 // 给它一些内容
+                 let newContent = document.createTextNode("colincora！Q3300519161");
+                 // 添加文本节点 到这个新的 div 元素
+                 newDiv.appendChild(newContent);
+                 newDiv.style.position='fixed';
+                 newDiv.style.backgroundColor='red'
+                //  newDiv.style.width='20px';
+                //  newDiv.style.length='20px';
+                newDiv.style.fontSize='28px';
+   // document.querySelector("#beginHeaderNav").appendChild(newDiv);
+                newDiv.style.top='60px';
+
+                }
+
+
+function zhongzhuan(){
+    var bgdiv = document.getElementsByClassName("question-info-box");
+    tibody=document.getElementsByClassName("question-title-box");
+    console.log(tibody)
+    total = tibody.length;
+    kaishi(tibody[index]);
+
+}
+
+function kaishi(ti){
+    let text=document.getElementsByClassName("question-title-box")[0].innerText.substring(4);
+console.log(text);
+        GM_xmlhttpRequest({//油猴脚本提供的异步函数
+            method: 'POST',
+            url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded'
+            },
+            data: 'question='+ encodeURIComponent(document.getElementsByClassName("question-title-box")[0].innerText.substring(4)),
+            timeout: 2000,
+
+            onload:function(xhr)
+            {
+
+//自动选择答案
+                let json=JSON.parse(xhr.responseText);
+                let daan=json.data;
+if(json.code==-1)daan="答案未找到";
+ console.log(xhr.responseText);
+let answerarray=daan.split('#');//答案数组
+                console.log('答案数组：'+answerarray)
+
+let daanlength=ti.getElementsByClassName("radio_item question-option-item-box").length;//多少个选项
+for(let i=0;i<daanlength;i++){
+    for(let i2=0;i2<answerarray.length;i2++)
+    {
+        //  console.log(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]);
+
+        if(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]==answerarray[i2])ti.getElementsByClassName("radio_item question-option-item-box")[i].firstElementChild.click();
+    }
+}
+
+//显示答案
+ let newdaan=' ';
+for(let i=0;i<answerarray.length;i++)
+ {
+     newdaan=newdaan+'<br>'+answerarray[i];
+
+ }
+                var text = document.querySelector('.question-title-text');
+                text.innerHTML=document.getElementsByClassName("question-title-text")[0].innerHTML+ "<br>答案:"+newdaan;
+                console.log(newdaan)
+ text.style.color = "red";
+text.style.fontSize = "10px";
+                if(index < total - 1)//继续搜索接下来的题
+                {
+                  setTimeout(function (){
+                      index = index + 1;
+                      kaishi(tibody[index]);
+}, 1000);
+
+                }
+
+
+            }
+        })
+    }
+
+(function() {
+
+
+    'use strict';
+
+    function skip() {
+        const video = document.getElementsByTagName('video')[0]
+        if (video != null) {
+            video.play()
+            video.currentTime = video.duration - 6
+        } else {
+            GM_log("找不到视频")
+        }
+    }
+
+    function addBtn() {
+        var button = document.createElement("input");
+        button.setAttribute("type", "button");
+        button.setAttribute("value", '跳过')
+        button.addEventListener('click', skip)
+        //document.body.appendChild(button)
+        document.getElementsByClassName("course-name")[0].appendChild(button)
+console.log('成功跳过视频！');
+        var div = document.querySelector('.course-name');
+        div.insertAdjacentHTML('afterend', '<a class="button">查看答案</a>');
+        document.querySelector('.button').onclick = function () {
+         zhongzhuan();
+        }
+    }
+    addBtn()
+
+})();
+        }else{
 window.onload = function(){
     var bgdiv = document.getElementById("writeQuestion");
-bgdiv.style.background = "url('https://i.postimg.cc/BZKZRRtJ/20220508084230592.jpg')";
+//bgdiv.style.background = "url('https://i.postimg.cc/BZKZRRtJ/20220508084230592.jpg')";
 
 tibody=document.getElementsByClassName("questionItem question-item-box");
 total = tibody.length;
@@ -50,7 +180,7 @@ kaishi(tibody[index]);//传入每道题
 function kaishi(ti){
         GM_xmlhttpRequest({//油猴脚本提供的异步函数
             method: 'POST',
-            url: 'http://cx.icodef.com/wyn-nb?v=2',//网课接口
+            url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded'
             },
@@ -110,22 +240,51 @@ for(let i=0;i<answerarray.length;i++)
 
     function skip() {
         const video = document.getElementsByTagName('video')[0]
-        if (video != null) {            
+        if (video != null) {
             video.play()
-            video.currentTime = video.duration - 6
+            video.currentTime = video.duration - 1
         } else {
             GM_log("找不到视频")
         }
     }
 
-    function addBtn() {
-        var button = document.createElement("input");
-        button.setAttribute("type", "button");
-        button.setAttribute("value", '跳过')
-        button.addEventListener('click', skip)
-        //document.body.appendChild(button)
-        document.getElementsByClassName("course-name")[0].appendChild(button)
-    }
-    addBtn()
-
 })();
+        }
+
+GM_addStyle(`
+
+.button {
+    background: #eb94d0 !important;
+  /* 创建渐变 */
+    background-image: -webkit-linear-gradient(top, #eb94d0, #2079b0);
+    background-image: -moz-linear-gradient(top, #eb94d0, #2079b0);
+    background-image: -ms-linear-gradient(top, #eb94d0, #2079b0);
+    background-image: -o-linear-gradient(top, #eb94d0, #2079b0);
+    background-image: linear-gradient(to bottom, #eb94d0, #2079b0);
+    /* 给按钮添加圆角 */
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    text-shadow: 3px 2px 1px #9daef5;
+    -webkit-box-shadow: 6px 5px 24px #666666;
+    -moz-box-shadow: 6px 5px 24px #666666;
+    box-shadow: 6px 5px 24px #666666;
+    font-family: Arial;
+    color: #fafafa;
+    font-size: 5px;
+    padding: 3px;
+    text-decoration: none;
+
+}
+
+.button:hover{
+	background:#2079b0 !important;        /*:hover CSS伪类,鼠标悬停效果,这里是鼠标放上去就变色*/
+    background-image: -webkit-linear-gradient(top, #2079b0, #eb94d0);
+    background-image: -moz-linear-gradient(top, #2079b0, #eb94d0);
+    background-image: -ms-linear-gradient(top, #2079b0, #eb94d0);
+    background-image: -o-linear-gradient(top, #2079b0, #eb94d0);
+    background-image: linear-gradient(to bottom, #2079b0, #eb94d0);
+    text-decoration: none;
+}
+
+`)
