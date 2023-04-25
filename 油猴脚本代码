@@ -62,7 +62,8 @@ console.log(text);
             method: 'POST',
             url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
             headers: {
-                'Content-type': 'application/x-www-form-urlencoded'
+                'Content-type': 'application/x-www-form-urlencoded',
+                 'Authorization': 'NLUIeWEHQHBAapeH'
             },
             data: 'question='+ encodeURIComponent(document.getElementsByClassName("question-title-box")[0].innerText.substring(4)),
             timeout: 2000,
@@ -84,7 +85,7 @@ for(let i=0;i<daanlength;i++){
     {
         //  console.log(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]);
 
-        if(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]==answerarray[i2])ti.getElementsByClassName("radio_item question-option-item-box")[i].firstElementChild.click();
+        if(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]==answerarray[i2])ti.getElementsByClassName("radio_item question-option-item-box")[i].firstElementChild;
     }
 }
 
@@ -182,7 +183,8 @@ function kaishi(ti){
             method: 'POST',
             url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
             headers: {
-                'Content-type': 'application/x-www-form-urlencoded'
+                 'Content-type': 'application/x-www-form-urlencoded',
+                 'Authorization': 'NLUIeWEHQHBAapeH'
             },
             data: 'question='+ encodeURIComponent(ti.getElementsByClassName("question-title-box")[0].innerText),
             timeout: 2000,
@@ -205,7 +207,7 @@ for(let i=0;i<daanlength;i++){
     {
         //  console.log(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]);
 
-        if(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]==answerarray[i2])ti.getElementsByClassName("radio_item question-option-item-box")[i].firstElementChild.click();
+        //if(ti.getElementsByClassName("radio_item question-option-item-box")[i].innerText.split('、')[1]==answerarray[i2])ti.getElementsByClassName("radio_item question-option-item-box")[i].firstElementChild.click();
     }
 }
 
