@@ -7,6 +7,7 @@
 // @match        https://stu.ityxb.com/preview/detail/*
 // @namespace    https://stu.ityxb.com/writePaper/busywork/*
 // @match        https://stu.ityxb.com/writePaper/busywork/*
+// @match        https://stu.ityxb.com/lookPaper/busywork/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @grant        GM_log
@@ -20,6 +21,11 @@ var index = 0;//搜题索引自动增加
  let url = window.location.href;
 console.log('欢迎使用colincora传智播客小助手！作者QQ3300519161');
         if(url.includes("https://stu.ityxb.com/preview/detail/")){
+            const courseName = document.querySelector('p.course-name');
+if (courseName) {
+  courseName.textContent = '';
+}
+
             console.log('这是预习作业答题部分！');
             window.onload = function(){
 //    var bgdiv = document.getElementsByClassName("question-info-box");
@@ -55,6 +61,7 @@ function zhongzhuan(){
 
 }
 
+
 function kaishi(ti){
     let text=document.getElementsByClassName("question-title-box")[0].innerText.substring(4);
 console.log(text);
@@ -63,7 +70,7 @@ console.log(text);
             url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
-                 'Authorization': 'NLUIeWEHQHBAapeH'
+                 'Authorization': '5QAVkTzYvgbAdeDL'
             },
             data: 'question='+ encodeURIComponent(document.getElementsByClassName("question-title-box")[0].innerText.substring(4)),
             timeout: 2000,
@@ -120,31 +127,64 @@ text.style.fontSize = "10px";
 
     'use strict';
 
-    function skip() {
-        const video = document.getElementsByTagName('video')[0]
-        if (video != null) {
-            video.play()
-            video.currentTime = video.duration - 6
-        } else {
-            GM_log("找不到视频")
+function skipp(){
+    const videos = document.getElementsByTagName('video')
+        if (videos.length > 0) {
+            for (const video of videos) {
+                video.play()
+                video.currentTime = video.duration - 1
+            }
+}
+}
+function skip() {
+  const progressBoxes = document.querySelectorAll('span.point-progress-box');
+  for (const box of progressBoxes) {
+    if (box.innerHTML === "100%") {
+      continue;
+    } else if (box.innerHTML === "0%") {
+      const playIcons = box.parentElement.querySelectorAll('i.icon-circle.play-ico');
+      if (playIcons.length > 0) {
+        playIcons.forEach(function(icon) {
+          icon.click();
         }
-    }
+                         );
+      }
 
-    function addBtn() {
-        var button = document.createElement("input");
-        button.setAttribute("type", "button");
-        button.setAttribute("value", '跳过')
-        button.addEventListener('click', skip)
-        //document.body.appendChild(button)
-        document.getElementsByClassName("course-name")[0].appendChild(button)
-console.log('成功跳过视频！');
-        var div = document.querySelector('.course-name');
+    }
+      skipp();
+  }
+}
+function addAutoSkipBtn() {
+  var autoSkipBtn = document.createElement("input");
+  autoSkipBtn.setAttribute("type", "button");
+  autoSkipBtn.setAttribute("value", "开启自动跳过视频");
+  autoSkipBtn.setAttribute("class", "autoSkipBtn");
+  autoSkipBtn.addEventListener("click", toggleAutoSkip);
+  document.getElementsByClassName("course-name")[0].appendChild(autoSkipBtn);
+            var div = document.querySelector('.course-name');
         div.insertAdjacentHTML('afterend', '<a class="button">查看答案</a>');
         document.querySelector('.button').onclick = function () {
          zhongzhuan();
         }
-    }
-    addBtn()
+}
+
+function toggleAutoSkip() {
+  var autoSkipBtn = document.querySelector(".autoSkipBtn");
+  if (autoSkipBtn.getAttribute("value") == "开启自动跳过视频") {
+    autoSkipBtn.setAttribute("value", "关闭自动跳过视频");
+      skip1()
+  } else {
+    autoSkipBtn.setAttribute("value", "开启自动跳过视频");
+  }
+}
+
+addAutoSkipBtn();
+
+function skip1() {
+  setInterval(function() {
+    skip();
+  }, 3000);
+};
 
 })();
         }else{
@@ -154,6 +194,7 @@ window.onload = function(){
 
 tibody=document.getElementsByClassName("questionItem question-item-box");
 total = tibody.length;
+      console.log(tibody[index]);
 kaishi(tibody[index]);//传入每道题
 
 
@@ -183,7 +224,7 @@ function kaishi(ti){
             method: 'POST',
             url: 'http://cx.icodef.com/wyn-nb?v=4',//网课接口
             headers: {
-                 'Content-type': 'application/x-www-form-urlencoded',
+                'Content-type': 'application/x-www-form-urlencoded',
                  'Authorization': 'NLUIeWEHQHBAapeH'
             },
             data: 'question='+ encodeURIComponent(ti.getElementsByClassName("question-title-box")[0].innerText),
@@ -226,6 +267,7 @@ for(let i=0;i<answerarray.length;i++)
                   setTimeout(function (){
                       index = index + 1;
                       kaishi(tibody[index]);
+
 }, 1000);
 
                 }
@@ -239,16 +281,6 @@ for(let i=0;i<answerarray.length;i++)
 
 
     'use strict';
-
-    function skip() {
-        const video = document.getElementsByTagName('video')[0]
-        if (video != null) {
-            video.play()
-            video.currentTime = video.duration - 1
-        } else {
-            GM_log("找不到视频")
-        }
-    }
 
 })();
         }
